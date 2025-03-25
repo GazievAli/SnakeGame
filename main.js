@@ -50,6 +50,9 @@ class Snake {
             if (savedHighscore) {
                 this.highscore = parseInt(savedHighscore, 10);
             }
+    
+            this.#position = [{ x: this.start_pos_x, y: this.start_pos_y }];
+    
         } catch (error) {
             console.error("Error initializing the game:", error);
         }
@@ -272,12 +275,12 @@ snake.createSnake({
     appleColor: "#E3311D",
     borderColor: "#050507",
     canvasColor: "#121212",
-    speed: 50,
+    speed: 100,
     isTpBorder: true,
-    gridSize: 10,
+    gridSize: 20,
     canvasSize: 600,
-    start_pos_x: 20,
-    start_pos_y: 20
+    start_pos_x: 40,
+    start_pos_y: 40
 });
 
 snake.start();
