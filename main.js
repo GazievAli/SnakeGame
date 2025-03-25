@@ -29,26 +29,29 @@ class Snake {
 
     createSnake(args) {
         try {
-            args.canvas.width = args.canvasSize;
-            args.canvas.height = args.canvasSize;
-            this.canvasSize = args.canvasSize;
+            args.canvas.width = args.canvasSize || 600;
+            args.canvas.height = args.canvasSize || 600;
+            this.canvasSize = args.canvasSize || 600;
             this.ctx = args.canvas.getContext("2d");
-            this.gridSize = args.gridSize;
-            this.score_el = args.score;
-            this.highscore_el = args.highscore;
-            this.ceils = args.canvasSize / args.gridSize;
-            this.isTpBorder = args.isTpBorder;
-            this.isGrid = args.isGrid;
-            this.isGridSnake = args.isGridSnake;
-            this.isGridApple = args.isGridApple;
-            this.isSound = args.isSound;
-            this.start_pos_x = args.start_pos_x;
-            this.start_pos_y = args.start_pos_y;
-            this.snakeColor = args.snakeColor;
-            this.appleColor = args.appleColor;
-            this.borderColor = args.borderColor;
-            this.headColor = args.headColor || this.snakeColor;
-            this.speed = args.speed;
+            this.gridSize = args.gridSize || 10;
+            this.score_el = args.score || document.getElementById("score");
+            this.highscore_el = args.highscore || document.getElementById("highscore");
+            this.ceils = args.canvasSize / this.gridSize;
+            this.isTpBorder = args.isTpBorder !== undefined ? args.isTpBorder : true;
+            this.isGridSnake = args.isGridSnake || true;
+            this.isGrid = args.isGrid || true;
+            this.isGridApple = args.isGridApple || false;
+            this.isSound = args.isSound || false;
+            this.start_pos_x = args.start_pos_x || 20;
+            this.start_pos_y = args.start_pos_y || 20;
+            this.snakeColor = args.snakeColor || "lime";
+            this.headColor = args.headColor || "green";
+            this.appleColor = args.appleColor || "red";
+            this.borderColor = args.borderColor || "#111";
+            this.canvasColor = args.canvasColor || "#222";
+            this.speed = args.speed || 100;
+            this.start_pos_x = args.start_pos_x || 20;
+            this.start_pos_y = args.start_pos_y || 20;
             args.canvas.style.background = args.canvasColor;
     
             const savedHighscore = this.getCookie('highscore');
