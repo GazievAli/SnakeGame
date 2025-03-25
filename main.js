@@ -38,11 +38,16 @@ class Snake {
             this.highscore_el = args.highscore;
             this.ceils = args.canvasSize / args.gridSize;
             this.isTpBorder = args.isTpBorder;
+            this.isGrid = args.isGrid;
+            this.isGridSnake = args.isGridSnake;
+            this.isGridApple = args.isGridApple;
+            this.isSound = args.isSound;
             this.start_pos_x = args.start_pos_x;
             this.start_pos_y = args.start_pos_y;
             this.snakeColor = args.snakeColor;
             this.appleColor = args.appleColor;
             this.borderColor = args.borderColor;
+            this.headColor = args.headColor || this.snakeColor;
             this.speed = args.speed;
             args.canvas.style.background = args.canvasColor;
     
@@ -126,33 +131,48 @@ class Snake {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
+        
+        if(this.isGrid) {
+            this.ctx.strokeStyle = this.borderColor;
+            this.ctx.lineWidth = 1;
 
-        this.ctx.strokeStyle = this.borderColor;
-        this.ctx.lineWidth = 1;
-        for (let x = 0; x <= this.canvasSize / this.gridSize; x++) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(x * this.gridSize, 0);
-            this.ctx.lineTo(x * this.gridSize, this.canvasSize);
-            this.ctx.stroke();
+            for (let x = 0; x <= this.canvasSize / this.gridSize; x++) {
+                this.ctx.beginPath();
+                this.ctx.moveTo(x * this.gridSize, 0);
+                this.ctx.lineTo(x * this.gridSize, this.canvasSize);
+                this.ctx.stroke();
+            }
+
+            for (let y = 0; y <= this.canvasSize / this.gridSize; y++) {
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, y * this.gridSize);
+                this.ctx.lineTo(this.canvasSize, y * this.gridSize);
+                this.ctx.stroke();
+            }
         }
-
-        for (let y = 0; y <= this.canvasSize / this.gridSize; y++) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(0, y * this.gridSize);
-            this.ctx.lineTo(this.canvasSize, y * this.gridSize);
-            this.ctx.stroke();
-        }
-
+    
         this.ctx.fillStyle = this.appleColor;
         this.ctx.fillRect(this.apple_x * this.gridSize, this.apple_y * this.gridSize, this.gridSize, this.gridSize);
-        this.ctx.strokeRect(this.apple_x * this.gridSize, this.apple_y * this.gridSize, this.gridSize, this.gridSize);
-
+        if(this.isGridApple) {
+            this.ctx.strokeRect(this.apple_x * this.gridSize, this.apple_y * this.gridSize, this.gridSize, this.gridSize);
+        }
+        let head = this.#position[0];
+        this.ctx.fillStyle = this.headColor;
+        this.ctx.fillRect(head.x * this.gridSize, head.y * this.gridSize, this.gridSize, this.gridSize);
+        if(this.isGridSnake) {
+            this.ctx.strokeRect(head.x * this.gridSize, head.y * this.gridSize, this.gridSize, this.gridSize);
+        }
+    
         this.ctx.fillStyle = this.snakeColor;
-        this.#position.forEach(el => {
-            this.ctx.fillRect(el.x * this.gridSize, el.y * this.gridSize, this.gridSize, this.gridSize);
-            this.ctx.strokeRect(el.x * this.gridSize, el.y * this.gridSize, this.gridSize, this.gridSize);
-        });
+        for (let i = 1; i < this.#position.length; i++) {
+            let segment = this.#position[i];
+            this.ctx.fillRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize, this.gridSize);
+            if(this.isGridSnake) {
+                this.ctx.strokeRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize, this.gridSize);
+            }
+        }
     }
+    
 
     listenerKeys() {
         const keyMap = {
@@ -198,7 +218,7 @@ class Snake {
     }
 
     resetGame() {
-        this.playSound();
+        if (this.isSound) this.playSound();
         clearInterval(this.#gameInterval);
         this.#gameInterval = null;
 
@@ -272,11 +292,16 @@ snake.createSnake({
     score: score,
     highscore: highscore,
     snakeColor: "#288ADA",
-    appleColor: "#E3311D",
+    appleColor: "#D3311D",
     borderColor: "#050507",
     canvasColor: "#121212",
+    headColor: "#1B47A5",
     speed: 100,
+    isSound: false,
     isTpBorder: true,
+    isGrid: true,
+    isGridSnake: false,
+    isGridApple: false,
     gridSize: 20,
     canvasSize: 600,
     start_pos_x: 40,
